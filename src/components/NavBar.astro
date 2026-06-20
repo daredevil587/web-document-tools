@@ -3,6 +3,8 @@ export interface Props {
   activePath?: string;
 }
 const { activePath = '/' } = Astro.props;
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => path === '/' ? `${basePath}/` : `${basePath}${path}`;
 
 const primaryTools = [
   { href: '/compress-pdf',   label: 'Compress PDF' },
@@ -21,7 +23,7 @@ const allTools = [...primaryTools, ...moreTools];
 ---
 
 <nav class="navbar">
-  <a class="nav-brand" href="/">
+  <a class="nav-brand" href={withBase('/')}>
     <div class="nav-logo">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
@@ -38,7 +40,7 @@ const allTools = [...primaryTools, ...moreTools];
   <ul class="nav-links">
     {primaryTools.map(t => (
       <li>
-        <a href={t.href} class={activePath === t.href ? 'active' : ''}>
+        <a href={withBase(t.href)} class={activePath === t.href ? 'active' : ''}>
           {t.label}
         </a>
       </li>
@@ -55,7 +57,7 @@ const allTools = [...primaryTools, ...moreTools];
       <ul class="nav-more-menu" id="navMoreMenu" role="menu">
         {moreTools.map(t => (
           <li role="none">
-            <a href={t.href} role="menuitem"
+            <a href={withBase(t.href)} role="menuitem"
                class={activePath === t.href ? 'nav-more-item active' : 'nav-more-item'}>
               {t.label}
             </a>
@@ -93,7 +95,7 @@ const allTools = [...primaryTools, ...moreTools];
 <div class="mobile-menu" id="mobileMenu">
   <ul>
     {allTools.map(t => (
-      <li><a href={t.href} class={activePath === t.href ? 'active' : ''}>{t.label}</a></li>
+      <li><a href={withBase(t.href)} class={activePath === t.href ? 'active' : ''}>{t.label}</a></li>
     ))}
   </ul>
 </div>

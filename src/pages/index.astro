@@ -63,7 +63,9 @@ const tools = [
   },
 ];
 
-const siteUrl = 'https://docprivacy.tools';
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => path === '/' ? `${basePath}/` : `${basePath}${path}`;
+const siteUrl = 'https://daredevil587.github.io/web-document-tools';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -109,7 +111,7 @@ const jsonLd = {
   <section class="tools-section">
     <div class="tools-grid">
       {tools.map(tool => (
-        <a class="tool-card-link" href={tool.href}>
+        <a class="tool-card-link" href={withBase(tool.href)}>
           <div class="tool-card-icon" style={`background:${tool.color};`}>
             {tool.icon}
           </div>
@@ -160,13 +162,13 @@ const jsonLd = {
       <span class="footer-brand">Doc<span class="brand-accent">Privacy</span> Tools</span>
       <p>&copy; {new Date().getFullYear()} DocPrivacy Tools &bull; 100% browser-based &bull; No data collected</p>
       <div class="footer-links">
-        <a href="/compress-pdf">Compress PDF</a>
-        <a href="/merge-pdf">Merge PDF</a>
-        <a href="/jpg-to-pdf">JPG to PDF</a>
-        <a href="/pdf-to-jpg">PDF to JPG</a>
-        <a href="/compress-image">Compress Image</a>
-        <a href="/edit-pdf">Edit PDF</a>
-        <a href="/unlock-pdf">Unlock PDF</a>
+        <a href={withBase('/compress-pdf')}>Compress PDF</a>
+        <a href={withBase('/merge-pdf')}>Merge PDF</a>
+        <a href={withBase('/jpg-to-pdf')}>JPG to PDF</a>
+        <a href={withBase('/pdf-to-jpg')}>PDF to JPG</a>
+        <a href={withBase('/compress-image')}>Compress Image</a>
+        <a href={withBase('/edit-pdf')}>Edit PDF</a>
+        <a href={withBase('/unlock-pdf')}>Unlock PDF</a>
       </div>
     </div>
   </footer>
