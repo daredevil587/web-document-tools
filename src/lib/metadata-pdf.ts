@@ -116,7 +116,11 @@ export async function updatePdfMetadata(
     if (!newMeta.creationDate) {
       (pdfDoc as any).setCreationDate(undefined);
     } else {
-      pdfDoc.setCreationDate(new Date(newMeta.creationDate));
+      const d = new Date(newMeta.creationDate);
+      if (isNaN(d.getTime())) {
+        throw new Error('Invalid Creation Date. Please use YYYY-MM-DDTHH:MM:SSZ format.');
+      }
+      pdfDoc.setCreationDate(d);
     }
   }
 
@@ -124,7 +128,11 @@ export async function updatePdfMetadata(
     if (!newMeta.modificationDate) {
       (pdfDoc as any).setModificationDate(undefined);
     } else {
-      pdfDoc.setModificationDate(new Date(newMeta.modificationDate));
+      const d = new Date(newMeta.modificationDate);
+      if (isNaN(d.getTime())) {
+        throw new Error('Invalid Modification Date. Please use YYYY-MM-DDTHH:MM:SSZ format.');
+      }
+      pdfDoc.setModificationDate(d);
     }
   }
 
