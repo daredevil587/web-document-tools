@@ -1,0 +1,71 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import UnlockPdfTool from '../components/tools/UnlockPdfTool';
+
+const siteUrl = 'https://docprivacy.tools';
+
+const faqs = [
+  { q: 'What does "unlock PDF" actually mean?', a: 'PDF files can have two kinds of protection. An "owner password" restricts actions like editing, copying, or printing — but the file can still be opened. A "user password" requires a password just to open and view the file. This tool handles both, within ethical limits.' },
+  { q: 'Is my file uploaded to a server?', a: 'No. All processing happens entirely in your browser using pdfjs-dist and pdf-lib. Your file never leaves your device.' },
+  { q: 'Can this tool crack or guess passwords?', a: 'No. If your PDF has a user (open) password, you must already know the correct password. This tool does not perform brute-force or dictionary attacks. It only verifies the password you provide and converts the file.' },
+  { q: 'Why is the output an image-based PDF for password-protected files?', a: 'When a PDF requires a password to open, the content is encrypted and cannot be decoded without the correct key. After verifying your password, we render each page as an image to produce an accessible copy. This means the text in the output PDF will not be selectable or searchable.' },
+  { q: 'Is it legal to remove PDF restrictions?', a: 'You should only remove restrictions from documents you own, created yourself, or have explicit permission to modify. Removing restrictions from commercially licensed or third-party documents without authorisation may violate copyright law or terms of service.' },
+  { q: 'What is the maximum file size?', a: 'Up to 50 MB. Processing happens in your browser, so very large files may take a few extra seconds.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Unlock PDF Online Free',
+    url: `${siteUrl}/unlock-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Remove PDF permission restrictions or access password-protected PDFs you own. 100% private — processing happens entirely in your browser.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12',
+    title: 'Upload PDF',
+    desc: 'Drop or browse for your locked PDF. Nothing leaves your browser.',
+  },
+  {
+    icon: 'M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4',
+    title: 'Auto-Detect & Unlock',
+    desc: 'The tool checks for restrictions. For owner-locked files it removes them instantly; for password-protected files it asks for your password.',
+  },
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3',
+    title: 'Download',
+    desc: 'Your unlocked PDF is ready to download in seconds.',
+  },
+];
+---
+
+<ToolPage
+  title="Unlock PDF Online Free — Remove PDF Restrictions | DocPrivacy Tools"
+  description="Remove PDF permission restrictions or access password-protected files you own. 100% private — your PDF never leaves your browser. Free, no account needed."
+  canonical={`${siteUrl}/unlock-pdf`}
+  jsonLd={jsonLd}
+  h1="Unlock <span class='highlight'>PDF</span> Online Free"
+  tagline="Remove permission restrictions from PDFs you own, or access files using a password you already have. Everything runs privately in your browser."
+  badge="100% Private · No Upload · Free Forever"
+  trustItems={['Browser-Only', 'No Brute Force', 'No Account', 'Free Forever']}
+  steps={steps}
+  faqs={faqs}
+  activePath="/unlock-pdf"
+>
+  <UnlockPdfTool client:load />
+</ToolPage>

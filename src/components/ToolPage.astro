@@ -1,0 +1,159 @@
+---
+import Layout from '../layouts/Layout.astro';
+import NavBar from './NavBar.astro';
+import PrivacyBanner from './PrivacyBanner.astro';
+import AdSlot from './AdSlot.astro';
+
+export interface Step {
+  icon: string;   // SVG path data
+  title: string;
+  desc: string;
+}
+
+export interface FAQ {
+  q: string;
+  a: string;
+}
+
+export interface Props {
+  // SEO
+  title: string;
+  description: string;
+  canonical?: string;
+  jsonLd?: object | object[];
+  // Hero copy
+  h1: string;
+  tagline: string;
+  badge?: string;
+  trustItems?: string[];
+  // Steps + FAQ
+  steps: Step[];
+  faqs: FAQ[];
+  // Nav
+  activePath: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  jsonLd,
+  h1,
+  tagline,
+  badge = '100% Free · No Sign-up · Privacy First',
+  trustItems = ['Secure', 'Fast', 'No Watermark', 'Free Forever'],
+  steps,
+  faqs,
+  activePath,
+} = Astro.props;
+---
+
+<Layout {title} {description} {canonical} {jsonLd}>
+  <NavBar activePath={activePath} />
+  <PrivacyBanner />
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-circles">
+      <div class="circle c1"></div>
+      <div class="circle c2"></div>
+      <div class="circle c3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        {badge}
+      </div>
+      <h1 set:html={h1} />
+      <p>{tagline}</p>
+      <div class="hero-trust">
+        {trustItems.map(item => <span>&#10003; {item}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT: Above tool -->
+  <div style="max-width:720px;margin:0 auto;padding:0 1.5rem;">
+    <AdSlot slot="above-tool" />
+  </div>
+
+  <!-- TOOL WIDGET (injected by each page) -->
+  <section class="tool-section">
+    <div class="tool-card">
+      <slot />
+    </div>
+  </section>
+
+  <!-- AD SLOT: Below tool -->
+  <div style="max-width:720px;margin:-48px auto 0;padding:0 1.5rem;">
+    <AdSlot slot="below-tool" />
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how-it-works">
+    <div class="section-header">
+      <div class="section-badge">Simple Process</div>
+      <h2>How It Works</h2>
+      <p class="section-sub">Three steps &mdash; that's all it takes</p>
+    </div>
+    <div class="steps">
+      {steps.map((step, i) => (
+        <>
+          <div class="step">
+            <div class="step-num">{i + 1}</div>
+            <div class="step-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path d={step.icon} stroke="#6366f1" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h4>{step.title}</h4>
+            <p>{step.desc}</p>
+          </div>
+          {i < steps.length - 1 && (
+            <div class="step-connector"><div class="connector-line"></div></div>
+          )}
+        </>
+      ))}
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="section-header">
+      <div class="section-badge">FAQ</div>
+      <h2>Frequently Asked Questions</h2>
+      <p class="section-sub">Everything you need to know</p>
+    </div>
+    <div class="faq-list">
+      {faqs.map(faq => (
+        <div class="faq-item">
+          <button class="faq-question">
+            {faq.q}
+            <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <polyline points="6 9 12 15 18 9" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">{faq.a}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="footer-brand">Doc<span class="brand-accent">Privacy</span> Tools</span>
+      <p>&copy; {new Date().getFullYear()} DocPrivacy Tools &bull; 100% browser-based &bull; No data collected</p>
+      <div class="footer-links">
+        <a href="/">All Tools</a>
+        <a href="/compress-pdf">Compress PDF</a>
+        <a href="/merge-pdf">Merge PDF</a>
+        <a href="/compress-image">Compress Image</a>
+      </div>
+    </div>
+  </footer>
+</Layout>

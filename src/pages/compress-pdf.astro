@@ -1,0 +1,68 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import CompressPdfTool from '../components/tools/CompressPdfTool';
+
+const siteUrl = 'https://docprivacy.tools';
+
+const faqs = [
+  { q: 'Is this PDF compressor really free?', a: 'Yes, completely free with no file count limits, no watermarks, and no account required.' },
+  { q: 'Are my files uploaded to a server?', a: 'Never. Compression runs entirely in your browser using pdf-lib. Your PDF never leaves your device.' },
+  { q: 'How much will my PDF shrink?', a: 'Results vary. Removing redundant metadata and using object streams typically reduces size by 10–40%. PDFs already optimised by other tools may see less savings.' },
+  { q: 'Will compression reduce quality?', a: 'This tool uses lossless re-serialisation, so text and vector graphics stay identical. Embedded images keep their original quality.' },
+  { q: 'What is the maximum file size?', a: 'Up to 50 MB. Large files may take a few seconds since everything is processed on your device.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Compress PDF Online Free',
+    url: `${siteUrl}/compress-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Reduce PDF file size online for free. 100% private — files never leave your browser.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12',
+    title: 'Upload PDF',
+    desc: 'Drag & drop or click to select your PDF. Up to 50 MB.',
+  },
+  {
+    icon: 'M22 12h-4l-3 9L9 3l-3 9H2',
+    title: 'Auto Compress',
+    desc: 'The tool removes redundant data and re-serialises the PDF in your browser.',
+  },
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3',
+    title: 'Download',
+    desc: 'Your compressed PDF downloads automatically. Compare the file sizes.',
+  },
+];
+---
+
+<ToolPage
+  title="Compress PDF Online Free — 100% Private | DocPrivacy Tools"
+  description="Reduce PDF file size online for free. No upload, no account — PDF compression runs entirely in your browser. Files never leave your device."
+  canonical={`${siteUrl}/compress-pdf`}
+  jsonLd={jsonLd}
+  h1="Compress <span class='highlight'>PDF</span> Online Free"
+  tagline="Reduce your PDF file size in seconds — no upload needed. Everything runs in your browser."
+  steps={steps}
+  faqs={faqs}
+  activePath="/compress-pdf"
+>
+  <CompressPdfTool client:load />
+</ToolPage>

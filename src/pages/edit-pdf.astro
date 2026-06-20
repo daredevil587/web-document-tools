@@ -1,0 +1,71 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import EditPdfTool from '../components/tools/EditPdfTool';
+
+const siteUrl = 'https://docprivacy.tools';
+
+const faqs = [
+  { q: 'Is my PDF uploaded when I edit it?', a: 'Never. The entire editor — rendering, annotation, and saving — runs in your browser using pdfjs-dist and pdf-lib. Your file never leaves your device.' },
+  { q: 'Will my added text be selectable in the output?', a: 'Text annotations are rendered as visual overlays on the PDF. They will appear exactly as placed but are not machine-readable or searchable in the output. For searchable text, use the AcroForm field filler if your PDF has interactive form fields.' },
+  { q: 'What types of annotations can I add?', a: 'You can add text in any font size and colour, upload images (JPG, PNG, WebP), and draw a freehand signature. All annotations can be dragged to any position on the page.' },
+  { q: 'Does this work on password-protected PDFs?', a: 'If the PDF only has permission restrictions (owner password), the editor will still load and save it. If it requires an open password to view, use the Unlock PDF tool first.' },
+  { q: 'What is AcroForm field filling?', a: 'Some PDFs contain interactive form fields (text boxes, checkboxes). When detected, a "Fill Form Fields" panel appears below the editor where you can type values before saving.' },
+  { q: 'How large a file can I edit?', a: 'Up to 50 MB. Since all rendering and saving happens in your browser, very large multi-page PDFs may take a few seconds to load.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Edit PDF Online Free',
+    url: `${siteUrl}/edit-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Add text, signatures, and images to PDF files directly in your browser. 100% private — files never leave your device.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12',
+    title: 'Upload PDF',
+    desc: 'Drop or browse for your PDF. It stays entirely in your browser.',
+  },
+  {
+    icon: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7 M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z',
+    title: 'Add Annotations',
+    desc: 'Place text, images, or draw a signature anywhere on the page.',
+  },
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3',
+    title: 'Save & Download',
+    desc: 'Click Save PDF — your annotated file downloads instantly.',
+  },
+];
+---
+
+<ToolPage
+  title="Edit PDF Online Free — Add Text, Signature & Images | DocPrivacy Tools"
+  description="Edit PDF files online for free. Add text, draw a signature, or place images on any page. 100% private — files never leave your browser, no account needed."
+  canonical={`${siteUrl}/edit-pdf`}
+  jsonLd={jsonLd}
+  h1="Edit <span class='highlight'>PDF</span> Online Free"
+  tagline="Add text, signatures, and images to any PDF — right in your browser. Your files, your edits."
+  badge="100% Private · No Upload · Free Forever"
+  trustItems={['Browser-Only', 'No Watermark', 'No Account', 'Free Forever']}
+  steps={steps}
+  faqs={faqs}
+  activePath="/edit-pdf"
+>
+  <EditPdfTool client:load />
+</ToolPage>

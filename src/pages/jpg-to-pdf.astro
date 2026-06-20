@@ -1,0 +1,68 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import JpgToPdfTool from '../components/tools/JpgToPdfTool';
+
+const siteUrl = 'https://docprivacy.tools';
+
+const faqs = [
+  { q: 'Which image formats are supported?', a: 'JPG/JPEG, PNG, and WebP. All are converted client-side without any upload.' },
+  { q: 'Can I add multiple images into one PDF?', a: 'Yes — add as many as you need (up to 30). Each image becomes one page in the PDF.' },
+  { q: 'Will image quality be reduced?', a: 'No. Images are embedded at their original resolution using pdf-lib. No quality loss.' },
+  { q: 'Are my images uploaded anywhere?', a: 'No. Everything runs in your browser. Images and the resulting PDF never leave your device.' },
+  { q: 'Can I choose the page size?', a: 'Each page is sized to fit its image exactly. Standardised page-size options are on the roadmap.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'JPG to PDF Converter Online Free',
+    url: `${siteUrl}/jpg-to-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Convert JPG, PNG, and WebP images to PDF online for free. 100% private — runs in your browser.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  {
+    icon: 'M3 3h18v18H3z M8.5 8.5m-1.5 0a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0 M21 15l-5-5L5 21',
+    title: 'Upload Images',
+    desc: 'Select one or more JPG, PNG, or WebP files.',
+  },
+  {
+    icon: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z',
+    title: 'Convert to PDF',
+    desc: 'pdf-lib embeds each image as a page in a new PDF document.',
+  },
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3',
+    title: 'Download',
+    desc: 'Your multi-page PDF downloads instantly.',
+  },
+];
+---
+
+<ToolPage
+  title="JPG to PDF Converter Online Free — 100% Private | DocPrivacy Tools"
+  description="Convert JPG, PNG, and WebP images to PDF online for free. Multiple images → one PDF. No upload, no account — runs entirely in your browser."
+  canonical={`${siteUrl}/jpg-to-pdf`}
+  jsonLd={jsonLd}
+  h1="<span class='highlight'>JPG to PDF</span> Converter — Free &amp; Private"
+  tagline="Turn images into a PDF in seconds. Add as many images as you need — no upload, no account."
+  steps={steps}
+  faqs={faqs}
+  activePath="/jpg-to-pdf"
+>
+  <JpgToPdfTool client:load />
+</ToolPage>

@@ -1,0 +1,68 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import PdfToJpgTool from '../components/tools/PdfToJpgTool';
+
+const siteUrl = 'https://docprivacy.tools';
+
+const faqs = [
+  { q: 'What resolution are the exported JPG images?', a: 'Pages are rendered at 2× scale (192 DPI equivalent), giving sharp images suitable for print and screen.' },
+  { q: 'Are my PDFs uploaded to a server?', a: 'Never. PDF rendering uses pdf.js running in your browser via WebAssembly. No data leaves your device.' },
+  { q: 'How do I download all pages at once?', a: 'If your PDF has more than one page, a "Download All as ZIP" button appears which packages all JPGs in one zip file.' },
+  { q: 'Can I download individual pages?', a: 'Yes — click any thumbnail to download just that page.' },
+  { q: 'Does it work with scanned PDFs?', a: 'Yes. Since we render the visual output of each page, scanned documents export just as well as regular PDFs.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'PDF to JPG Converter Online Free',
+    url: `${siteUrl}/pdf-to-jpg`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Export PDF pages as JPG images online for free. 100% private — runs in your browser.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12',
+    title: 'Upload PDF',
+    desc: 'Drop your PDF or click to select. Up to 50 MB.',
+  },
+  {
+    icon: 'M3 3h18v18H3z M8.5 8.5m-1.5 0a1.5 1.5 0 1 0 3 0 M21 15l-5-5L5 21',
+    title: 'Render Pages',
+    desc: 'pdf.js renders each page at high resolution inside your browser.',
+  },
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3',
+    title: 'Download',
+    desc: 'Download individual pages or all pages as a ZIP.',
+  },
+];
+---
+
+<ToolPage
+  title="PDF to JPG Converter Online Free — 100% Private | DocPrivacy Tools"
+  description="Export PDF pages as JPG images online for free. No upload to servers — PDF to JPG conversion runs entirely in your browser using pdf.js."
+  canonical={`${siteUrl}/pdf-to-jpg`}
+  jsonLd={jsonLd}
+  h1="<span class='highlight'>PDF to JPG</span> Converter — Free &amp; Private"
+  tagline="Export every PDF page as a high-resolution JPG — all in your browser, nothing uploaded."
+  steps={steps}
+  faqs={faqs}
+  activePath="/pdf-to-jpg"
+>
+  <PdfToJpgTool client:load />
+</ToolPage>

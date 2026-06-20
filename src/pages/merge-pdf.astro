@@ -1,0 +1,68 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import MergePdfTool from '../components/tools/MergePdfTool';
+
+const siteUrl = 'https://docprivacy.tools';
+
+const faqs = [
+  { q: 'How many PDFs can I merge at once?', a: 'Up to 20 PDF files in a single merge operation.' },
+  { q: 'Are my files sent to a server?', a: 'No. Merging uses pdf-lib running in your browser. No file ever leaves your device.' },
+  { q: 'Can I control the order of pages?', a: 'Yes — use the up/down arrows to reorder files before merging.' },
+  { q: 'Do the original PDFs need to be the same size?', a: 'No. PDFs of any page size or orientation can be merged together.' },
+  { q: 'Will the merged PDF be larger than the sum of the originals?', a: 'It should be roughly the same size. pdf-lib adds minimal overhead.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Merge PDF Online Free',
+    url: `${siteUrl}/merge-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Combine multiple PDFs into one file online for free. 100% private — runs in your browser.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12',
+    title: 'Upload PDFs',
+    desc: 'Select 2 or more PDF files. Use the arrows to set the order.',
+  },
+  {
+    icon: 'M9 9V4H4v5h5zM15 9V4h5v5h-5zM9 15v5H4v-5h5zM15 15h5v5h-5v-5z',
+    title: 'Arrange & Merge',
+    desc: 'Reorder files however you like, then click Merge.',
+  },
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3',
+    title: 'Download',
+    desc: 'One combined PDF downloads automatically.',
+  },
+];
+---
+
+<ToolPage
+  title="Merge PDF Online Free — Combine PDFs Privately | DocPrivacy Tools"
+  description="Combine multiple PDF files into one document online, free. No upload to servers — PDF merging runs entirely in your browser."
+  canonical={`${siteUrl}/merge-pdf`}
+  jsonLd={jsonLd}
+  h1="Merge <span class='highlight'>PDFs</span> Online Free"
+  tagline="Combine multiple PDF files into one — drag to reorder, then download. 100% private, no upload."
+  steps={steps}
+  faqs={faqs}
+  activePath="/merge-pdf"
+>
+  <MergePdfTool client:load />
+</ToolPage>

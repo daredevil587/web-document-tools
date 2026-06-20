@@ -1,0 +1,68 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import CompressImageTool from '../components/tools/CompressImageTool';
+
+const siteUrl = 'https://docprivacy.tools';
+
+const faqs = [
+  { q: 'Which image formats can I compress?', a: 'JPG/JPEG, PNG, and WebP are all supported.' },
+  { q: 'Are my images uploaded to a server?', a: 'No. Compression uses the browser-image-compression library running on your device. Nothing is sent to any server.' },
+  { q: 'How much will the file size reduce?', a: 'With the default 80% quality setting, most photos shrink by 50–80%. Lower the quality slider for even smaller files.' },
+  { q: 'Can I control the compression level?', a: 'Yes — use the quality slider (20%–100%) before compressing. A before/after preview shows the result.' },
+  { q: 'Will the image dimensions change?', a: 'No, unless the image is extremely large (over 4096 px on any side), in which case it is scaled down proportionally.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Compress Image Online Free',
+    url: `${siteUrl}/compress-image`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Compress JPG, PNG, and WebP images online for free. 100% private — runs in your browser.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  {
+    icon: 'M3 3h18v18H3z M8.5 8.5m-1.5 0a1.5 1.5 0 1 0 3 0 M21 15l-5-5L5 21',
+    title: 'Upload Image',
+    desc: 'Select a JPG, PNG, or WebP image from your device.',
+  },
+  {
+    icon: 'M22 12h-4l-3 9L9 3l-3 9H2',
+    title: 'Set Quality',
+    desc: 'Adjust the quality slider and preview before/after.',
+  },
+  {
+    icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3',
+    title: 'Download',
+    desc: 'Download the compressed image instantly.',
+  },
+];
+---
+
+<ToolPage
+  title="Compress Image Online Free — JPG, PNG, WebP | DocPrivacy Tools"
+  description="Compress JPG, PNG, and WebP images online for free. Adjust quality with a slider. 100% private — image compression runs entirely in your browser."
+  canonical={`${siteUrl}/compress-image`}
+  jsonLd={jsonLd}
+  h1="Compress <span class='highlight'>Image</span> Online Free"
+  tagline="Shrink JPG, PNG, and WebP files with a quality slider — preview before you download. 100% private."
+  steps={steps}
+  faqs={faqs}
+  activePath="/compress-image"
+>
+  <CompressImageTool client:load />
+</ToolPage>

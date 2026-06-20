@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://docprivacy.tools/sitemap-index.xml

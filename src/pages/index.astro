@@ -1,0 +1,173 @@
+---
+import Layout from '../layouts/Layout.astro';
+import NavBar from '../components/NavBar.astro';
+import PrivacyBanner from '../components/PrivacyBanner.astro';
+import AdSlot from '../components/AdSlot.astro';
+
+const tools = [
+  {
+    href: '/compress-pdf',
+    icon: '📄',
+    color: '#fee2e2',
+    tag: 'PDF',
+    title: 'Compress PDF',
+    desc: 'Reduce PDF file size while keeping quality. No upload required — runs entirely in your browser.',
+  },
+  {
+    href: '/merge-pdf',
+    icon: '🔗',
+    color: '#dbeafe',
+    tag: 'PDF',
+    title: 'Merge PDF',
+    desc: 'Combine multiple PDF files into one document. Drag to reorder pages before merging.',
+  },
+  {
+    href: '/jpg-to-pdf',
+    icon: '🖼️',
+    color: '#dcfce7',
+    tag: 'Convert',
+    title: 'JPG to PDF',
+    desc: 'Turn one or more JPG, PNG, or WebP images into a single PDF document instantly.',
+  },
+  {
+    href: '/pdf-to-jpg',
+    icon: '📸',
+    color: '#fef9c3',
+    tag: 'Convert',
+    title: 'PDF to JPG',
+    desc: 'Export every page of a PDF as a high-resolution JPG image. Download all at once.',
+  },
+  {
+    href: '/compress-image',
+    icon: '🗜️',
+    color: '#ede9fe',
+    tag: 'Image',
+    title: 'Compress Image',
+    desc: 'Shrink JPG, PNG, and WebP files. Adjust quality with a slider and preview the result.',
+  },
+  {
+    href: '/edit-pdf',
+    icon: '✏️',
+    color: '#fef9c3',
+    tag: 'Edit',
+    title: 'Edit PDF',
+    desc: 'Add text, signatures, and images to any PDF page — directly in your browser. No upload needed.',
+  },
+  {
+    href: '/unlock-pdf',
+    icon: '🔓',
+    color: '#dcfce7',
+    tag: 'Security',
+    title: 'Unlock PDF',
+    desc: 'Remove permission restrictions from PDFs you own. Processing is 100% local — files never leave your device.',
+  },
+];
+
+const siteUrl = 'https://docprivacy.tools';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'DocPrivacy Tools',
+  url: siteUrl,
+  description: 'Free, private document and image tools. All processing happens in your browser — files never leave your device.',
+};
+---
+
+<Layout
+  title="Free PDF & Image Tools — 100% Private | DocPrivacy Tools"
+  description="Compress PDF, merge PDFs, convert JPG to PDF, PDF to JPG, and compress images — all free, all private. Files never leave your browser."
+  jsonLd={jsonLd}
+>
+  <NavBar activePath="/" />
+  <PrivacyBanner />
+
+  <!-- HERO -->
+  <section class="hero home-hero">
+    <div class="hero-bg-circles">
+      <div class="circle c1"></div>
+      <div class="circle c2"></div>
+      <div class="circle c3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        100% Free &bull; No Sign-up &bull; Privacy First
+      </div>
+      <h1>Free <span class="highlight">PDF &amp; Image</span><br/>Tools — 100% Private</h1>
+      <p>Every tool runs entirely in your browser. Your files never touch our servers — guaranteed.</p>
+      <div class="hero-trust">
+        <span>&#10003; No Upload</span>
+        <span>&#10003; No Account</span>
+        <span>&#10003; No Watermark</span>
+        <span>&#10003; Free Forever</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOL GRID -->
+  <section class="tools-section">
+    <div class="tools-grid">
+      {tools.map(tool => (
+        <a class="tool-card-link" href={tool.href}>
+          <div class="tool-card-icon" style={`background:${tool.color};`}>
+            {tool.icon}
+          </div>
+          <span class="tool-card-tag">{tool.tag}</span>
+          <h3>{tool.title}</h3>
+          <p>{tool.desc}</p>
+          <div class="tool-card-arrow">
+            Try it free
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <div style="max-width:1040px;margin:0 auto 40px;padding:0 1.5rem;">
+    <AdSlot slot="homepage-mid" />
+  </div>
+
+  <!-- WHY PRIVACY FIRST -->
+  <section style="max-width:860px;margin:0 auto 72px;padding:0 1.5rem;">
+    <div class="section-header">
+      <div class="section-badge">Why Us</div>
+      <h2>Why DocPrivacy Tools?</h2>
+      <p class="section-sub">Built differently — your privacy is the product</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:32px;">
+      {[
+        { icon:'🔒', title:'Zero Upload', desc:'Files are processed with WebAssembly in your tab. Nothing travels over the network.' },
+        { icon:'⚡', title:'Instant Processing', desc:'No server round-trip means results in seconds, not minutes.' },
+        { icon:'🆓', title:'Always Free', desc:'The core tools are free forever. No credit card, no trial period.' },
+        { icon:'📱', title:'Works Everywhere', desc:'Desktop, tablet, mobile — any modern browser, no install needed.' },
+      ].map(f => (
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px 20px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);">
+          <div style="font-size:2rem;">{f.icon}</div>
+          <h4 style="font-size:1rem;font-weight:800;">{f.title}</h4>
+          <p style="font-size:0.84rem;color:var(--text-muted);line-height:1.6;">{f.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="footer-brand">Doc<span class="brand-accent">Privacy</span> Tools</span>
+      <p>&copy; {new Date().getFullYear()} DocPrivacy Tools &bull; 100% browser-based &bull; No data collected</p>
+      <div class="footer-links">
+        <a href="/compress-pdf">Compress PDF</a>
+        <a href="/merge-pdf">Merge PDF</a>
+        <a href="/jpg-to-pdf">JPG to PDF</a>
+        <a href="/pdf-to-jpg">PDF to JPG</a>
+        <a href="/compress-image">Compress Image</a>
+        <a href="/edit-pdf">Edit PDF</a>
+        <a href="/unlock-pdf">Unlock PDF</a>
+      </div>
+    </div>
+  </footer>
+</Layout>

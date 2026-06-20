@@ -1,0 +1,11 @@
+---
+export interface Props {
+  slot?: string;
+}
+const { slot: slotName = 'banner' } = Astro.props;
+---
+
+<!-- AdSlot placeholder — replace with real AdSense unit before launch -->
+<div class="ad-slot" data-ad-slot={slotName}>
+  Ad · {slotName}
+</div>

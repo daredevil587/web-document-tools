@@ -1,0 +1,116 @@
+---
+export interface Props {
+  activePath?: string;
+}
+const { activePath = '/' } = Astro.props;
+
+const primaryTools = [
+  { href: '/compress-pdf',   label: 'Compress PDF' },
+  { href: '/merge-pdf',      label: 'Merge PDF' },
+  { href: '/jpg-to-pdf',     label: 'JPG to PDF' },
+  { href: '/pdf-to-jpg',     label: 'PDF to JPG' },
+  { href: '/compress-image', label: 'Compress Image' },
+];
+
+const moreTools = [
+  { href: '/edit-pdf',    label: 'Edit PDF' },
+  { href: '/unlock-pdf',  label: 'Unlock PDF' },
+];
+
+const allTools = [...primaryTools, ...moreTools];
+---
+
+<nav class="navbar">
+  <a class="nav-brand" href="/">
+    <div class="nav-logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+          stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="14 2 14 8 20 8" stroke="#fff" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="8" y1="13" x2="16" y2="13" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="8" y1="17" x2="13" y2="17" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span class="brand-name">Doc<span class="brand-accent">Privacy</span></span>
+  </a>
+
+  <ul class="nav-links">
+    {primaryTools.map(t => (
+      <li>
+        <a href={t.href} class={activePath === t.href ? 'active' : ''}>
+          {t.label}
+        </a>
+      </li>
+    ))}
+    <!-- More dropdown -->
+    <li class="nav-more-wrap">
+      <button class="nav-more-btn" id="navMoreBtn" aria-haspopup="true" aria-expanded="false">
+        More
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+          <polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <ul class="nav-more-menu" id="navMoreMenu" role="menu">
+        {moreTools.map(t => (
+          <li role="none">
+            <a href={t.href} role="menuitem"
+               class={activePath === t.href ? 'nav-more-item active' : 'nav-more-item'}>
+              {t.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="btn-theme" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <svg class="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+        <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    {allTools.map(t => (
+      <li><a href={t.href} class={activePath === t.href ? 'active' : ''}>{t.label}</a></li>
+    ))}
+  </ul>
+</div>
+
+<script is:inline>
+  // "More" dropdown toggle
+  const moreBtn  = document.getElementById('navMoreBtn');
+  const moreMenu = document.getElementById('navMoreMenu');
+  if (moreBtn && moreMenu) {
+    moreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = moreMenu.classList.toggle('open');
+      moreBtn.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', () => {
+      moreMenu.classList.remove('open');
+      moreBtn.setAttribute('aria-expanded', 'false');
+    });
+  }
+</script>
