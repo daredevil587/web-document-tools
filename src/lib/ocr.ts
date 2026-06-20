@@ -12,8 +12,8 @@ export async function runImageOcr(
 ): Promise<string> {
   onProgress(5, 'Initializing OCR engine…');
   
-  // Create worker with progress logging
-  const worker = await createWorker({
+  // Create worker using Tesseract.js v5+ API
+  const worker = await createWorker(lang, 1, {
     logger: m => {
       if (m.status === 'recognizing text') {
         const progressPct = 10 + Math.round(m.progress * 85);
@@ -25,10 +25,6 @@ export async function runImageOcr(
   });
 
   try {
-    onProgress(10, `Loading language data (${lang})…`);
-    await worker.loadLanguage(lang);
-    await worker.initialize(lang);
-
     onProgress(15, 'Running text recognition…');
     const { data: { text } } = await worker.recognize(file);
     
@@ -60,13 +56,9 @@ export async function runPdfOcr(
   const numPages = pdf.numPages;
 
   onProgress(5, 'Initializing OCR engine…');
-  const worker = await createWorker();
+  const worker = await createWorker(lang, 1);
 
   try {
-    onProgress(7, `Loading language data (${lang})…`);
-    await worker.loadLanguage(lang);
-    await worker.initialize(lang);
-
     let combinedText = '';
 
     for (let i = 1; i <= numPages; i++) {
