@@ -67,7 +67,7 @@ export async function renderPages(
   onProgress(5, 'Loading PDF renderer…');
   const pdfjsLib = await import('pdfjs-dist');
   pdfjsLib.GlobalWorkerOptions.workerSrc =
-    `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+    `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
 
   const bytes = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(bytes) }).promise;
@@ -84,7 +84,8 @@ export async function renderPages(
     const canvas = document.createElement('canvas');
     canvas.width = vp.width;
     canvas.height = vp.height;
-    await page.render({ canvas, viewport: vp }).promise;
+    const canvasContext = canvas.getContext('2d')!;
+    await (page.render as any)({ canvas, viewport: vp, canvasContext }).promise;
 
     rendered.push({
       pageIdx: i - 1,
@@ -107,7 +108,7 @@ export async function extractTextItems(
 ): Promise<TextItem[]> {
   const pdfjsLib = await import('pdfjs-dist');
   pdfjsLib.GlobalWorkerOptions.workerSrc =
-    `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+    `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
 
   const bytes = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(bytes) }).promise;

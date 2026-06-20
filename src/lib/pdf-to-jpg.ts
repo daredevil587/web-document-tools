@@ -17,8 +17,9 @@ export async function pdfToImages(
   // Lazy-load pdfjs — only when this tool is actually used
   const pdfjsLib = await import('pdfjs-dist');
 
-  // pdfjs-dist v6: use CDN worker to avoid Vite bundling issues
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+  // Use a pinned CDN worker URL that matches the installed version
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
 
   onProgress(15, 'Reading PDF…');
   const bytes = await file.arrayBuffer();
@@ -37,9 +38,11 @@ export async function pdfToImages(
     const canvas = document.createElement('canvas');
     canvas.width = viewport.width;
     canvas.height = viewport.height;
+    const canvasContext = canvas.getContext('2d')!;
 
-    // pdfjs-dist v4+: pass `canvas` directly (canvasContext is legacy)
-    await page.render({ canvas, viewport }).promise;
+    // Support both new canvas API (v4+) and legacy canvasContext API
+    const renderTask = (page.render as any)({ canvas, viewport, canvasContext });
+    await renderTask.promise;
 
     results.push({
       dataUrl: canvas.toDataURL('image/jpeg', 0.92),

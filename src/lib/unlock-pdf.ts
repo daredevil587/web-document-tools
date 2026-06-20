@@ -10,7 +10,7 @@ export interface DetectResult {
 export async function detectPdfLock(file: File): Promise<DetectResult> {
   const pdfjsLib = await import('pdfjs-dist');
   pdfjsLib.GlobalWorkerOptions.workerSrc =
-    `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+    `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
 
   const bytes = await file.arrayBuffer();
 
@@ -69,7 +69,7 @@ export async function unlockWithPassword(
   onProgress(10, 'Verifying password…');
   const pdfjsLib = await import('pdfjs-dist');
   pdfjsLib.GlobalWorkerOptions.workerSrc =
-    `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+    `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
 
   const bytes = await file.arrayBuffer();
 
@@ -102,7 +102,8 @@ export async function unlockWithPassword(
     const canvas = document.createElement('canvas');
     canvas.width = vp2.width;
     canvas.height = vp2.height;
-    await page.render({ canvas, viewport: vp2 }).promise;
+    const canvasContext = canvas.getContext('2d')!;
+    await (page.render as any)({ canvas, viewport: vp2, canvasContext }).promise;
 
     const jpgDataUrl = canvas.toDataURL('image/jpeg', 0.92);
     const base64 = jpgDataUrl.split(',')[1];
