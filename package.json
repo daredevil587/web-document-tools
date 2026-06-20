@@ -24,7 +24,8 @@
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^6.0.227",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

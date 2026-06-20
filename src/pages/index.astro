@@ -93,6 +93,14 @@ const tools = [
     title: 'Protect PDF',
     desc: 'Encrypt your PDF files with a secure password to prevent unauthorized viewing.',
   },
+  {
+    href: '/ocr',
+    icon: '🔍',
+    color: '#dcfce7',
+    tag: 'OCR',
+    title: 'OCR Text Extractor',
+    desc: 'Extract text from scanned PDFs and images locally. No files uploaded — 100% private.',
+  },
 ];
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -205,6 +213,7 @@ const jsonLd = {
         <a href={withBase('/rotate-pdf')}>Rotate PDF</a>
         <a href={withBase('/convert-image')}>Convert Image</a>
         <a href={withBase('/protect-pdf')}>Protect PDF</a>
+        <a href={withBase('/ocr')}>OCR Text Extractor</a>
       </div>
     </div>
   </footer>

@@ -1,0 +1,56 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import OcrTool from '../components/tools/OcrTool';
+
+const siteUrl = 'https://daredevil587.github.io/web-document-tools';
+
+const faqs = [
+  { q: 'How accurate is the OCR text extraction?', a: 'Text recognition accuracy is extremely high for clean, typed documents. Selecting the correct language before running the OCR tool will significantly improve accuracy.' },
+  { q: 'Are my files or extracted text uploaded to a server?', a: 'No. All text recognition is done entirely inside your browser using Tesseract.js. Your documents never leave your computer, ensuring absolute privacy.' },
+  { q: 'Can I extract text from multi-page PDF files?', a: 'Yes. The tool renders all pages of your PDF locally and extracts the text page-by-page, formatting them with page headers.' },
+  { q: 'Which languages are supported?', a: 'We support English, Spanish, French, German, Hindi, Chinese, Japanese, and Portuguese. We recommend selecting the correct language for the best results.' },
+  { q: 'Is there a limit on file size?', a: 'You can extract text from images and PDF documents up to 30 MB in size to prevent browser memory issues.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'OCR Text Extractor Online Free',
+    url: `${siteUrl}/ocr`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Extract text from scanned PDFs and images (PNG, JPG, WebP) online for free. 100% private browser-based processing.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12', title: 'Upload Document', desc: 'Select any image (PNG, JPG, WebP) or scanned PDF from your device.' },
+  { icon: 'M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 0 1 5 10m4.75 8a13.9 13.9 0 0 1-2.25-2.5M15 21l3.5-7 3.5 7M15.893 18h5.214', title: 'Choose Language', desc: 'Select the primary language of the document to optimize recognition accuracy.' },
+  { icon: 'M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2', title: 'Copy or Save', desc: 'Verify the extracted text, copy it with a single click, or download it as a .txt file.' },
+];
+---
+
+<ToolPage
+  title="OCR PDF & Images Free — Extract Text Online Privately | DocPrivacy Tools"
+  description="Extract text from images (PNG, JPG, WebP) and scanned PDF documents online for free. 100% private browser-based processing — files never leave your device."
+  canonical={`${siteUrl}/ocr`}
+  jsonLd={jsonLd}
+  h1="OCR <span class='highlight'>Text Extractor</span> Online"
+  tagline="Extract copyable text from scanned PDFs and images instantly. Runs 100% locally in your browser for total privacy."
+  steps={steps}
+  faqs={faqs}
+  activePath="/ocr"
+>
+  <OcrTool client:load />
+</ToolPage>
