@@ -6,6 +6,7 @@ const { slot: slotName = 'banner' } = Astro.props;
 ---
 
 <!-- AdSlot placeholder — replace with real AdSense unit before launch -->
-<div class="ad-slot" data-ad-slot={slotName}>
+<!-- The div is kept for easy ad injection, hidden until real ads are configured -->
+<div class="ad-slot" data-ad-slot={slotName} style="display:none;">
   Ad · {slotName}
 </div>

@@ -1,0 +1,27 @@
+{
+  "name": "DocPrivacy Tools",
+  "short_name": "DocPrivacy",
+  "description": "Free PDF & Image tools — 100% private, no upload required.",
+  "start_url": "/web-document-tools/",
+  "scope": "/web-document-tools/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#6366f1",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/web-document-tools/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/web-document-tools/favicon.ico",
+      "sizes": "16x16 32x32 48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "lang": "en",
+  "dir": "ltr"
+}

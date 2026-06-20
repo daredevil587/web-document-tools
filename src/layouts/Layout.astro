@@ -59,11 +59,23 @@ const ogImageUrl = withSite(ogImage);
     <!-- TODO: Replace with real token before launch -->
     <!-- <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"YOUR_TOKEN"}'></script> -->
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+    <link rel="manifest" href={withBase('/manifest.json')} />
+    <meta name="theme-color" content="#6366f1" />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
   </head>
 
   <body>
     <slot />
+
+    <button id="backToTop" class="back-to-top" aria-label="Back to top" title="Back to top">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <polyline points="18 15 12 9 6 15" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
 
     <script is:inline>
       // Persist dark mode across page loads
@@ -100,6 +112,15 @@ const ogImageUrl = withSite(ogImage);
           document.documentElement.setAttribute('data-theme', next);
           localStorage.setItem('theme', next);
         });
+      }
+
+      // Back to top
+      const btt = document.getElementById('backToTop');
+      if (btt) {
+        window.addEventListener('scroll', () => {
+          btt.classList.toggle('visible', window.scrollY > 320);
+        }, { passive: true });
+        btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
       }
     </script>
   </body>
