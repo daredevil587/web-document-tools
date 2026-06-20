@@ -1,0 +1,56 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import MetadataPdfTool from '../components/tools/MetadataPdfTool';
+
+const siteUrl = 'https://daredevil587.github.io/web-document-tools';
+
+const faqs = [
+  { q: 'What is PDF metadata?', a: 'PDF metadata contains hidden details about the document, such as the Title, Author, Subject, Keywords, Creator application, and creation or modification dates.' },
+  { q: 'Why should I sanitize my PDF metadata?', a: 'Metadata often contains sensitive, private information (like your real name, company details, or internal server directory paths where the file was saved). Sanitizing it removes these tracking tags before you publish or share the file.' },
+  { q: 'What is XMP metadata?', a: 'XMP (Extensible Metadata Platform) is an XML-based metadata format embedded in PDFs. Some readers only look at the standard Info dictionary, leaving tracking info inside the XMP stream intact. Our tool strips both standard Info properties and hidden XMP streams.' },
+  { q: 'Does this tool upload my files to any server?', a: 'No. All reading, editing, and saving of PDF metadata runs locally inside your browser. No data ever leaves your device.' },
+  { q: 'Is this tool free to use?', a: 'Yes, completely free, with no file limits up to 100 MB.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Clean PDF Metadata Online Free',
+    url: `${siteUrl}/metadata-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'View, edit, and sanitize hidden PDF metadata and XMP streams online. 100% private — running client-side.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12', title: 'Upload PDF', desc: 'Select any PDF file. Your browser parses the existing metadata properties locally.' },
+  { icon: 'M12 3v9 M8 11l4 4 4-4', title: 'Edit or Clean', desc: 'Modify properties like Title and Author, or click Clear All to strip them completely.' },
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3', title: 'Save & Download', desc: 'Download a clean, metadata-sanitized version of your PDF file.' },
+];
+---
+
+<ToolPage
+  title="Clean PDF Metadata Online Free — Sanitize PDF Properties | DocPrivacy Tools"
+  description="View, edit, and sanitize hidden PDF metadata and XMP XML streams online for free. Keep your files private. Runs entirely local in your browser."
+  canonical={`${siteUrl}/metadata-pdf`}
+  jsonLd={jsonLd}
+  h1="Clean <span class='highlight'>PDF</span> Metadata Online Free"
+  tagline="View, edit, or remove hidden document information and XMP metadata streams. 100% secure, local web engine."
+  steps={steps}
+  faqs={faqs}
+  activePath="/metadata-pdf"
+>
+  <MetadataPdfTool client:load />
+</ToolPage>

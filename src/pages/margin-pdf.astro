@@ -1,0 +1,56 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import MarginPdfTool from '../components/tools/MarginPdfTool';
+
+const siteUrl = 'https://daredevil587.github.io/web-document-tools';
+
+const faqs = [
+  { q: 'How does the PDF Margin Adjuster work?', a: 'It scales down the entire visual layout of each page (including vector text, fonts, images) and places it centered inside the original page dimensions, adding even white margins around the edges.' },
+  { q: 'Will this tool reduce the quality of my PDF?', a: 'No. This tool performs native PDF vector scaling. It does not rasterize the pages into images, so your text stays searchable, fonts remain crisp, and quality is completely preserved.' },
+  { q: 'What is a good margin size for printing?', a: 'A margin of 10% to 15% is usually perfect to prevent the printer from cropping the page edges or leaving binding margins.' },
+  { q: 'Can I adjust margins on encrypted files?', a: 'No. Please remove the password first using our Unlock PDF tool, then adjust the margins.' },
+  { q: 'Is it secure to use this tool?', a: 'Absolutely. The margin scaling happens entirely in your web browser. No files are uploaded to any server.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Add PDF Margins Online Free',
+    url: `${siteUrl}/margin-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Add margins and padding to PDF pages online for free. 100% private — scales PDF page content client-side.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12', title: 'Upload PDF', desc: 'Select any PDF file. Your browser reads it locally without uploading.' },
+  { icon: 'M12 3v9 M8 11l4 4 4-4', title: 'Adjust Slider', desc: 'Move the slider to set the desired margin percentage (0% to 30%).' },
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3', title: 'Download PDF', desc: 'Generate and download the new PDF with clean borders instantly.' },
+];
+---
+
+<ToolPage
+  title="Add PDF Margins Online Free — Scale PDF Content | DocPrivacy Tools"
+  description="Add custom margins and white space borders to PDF pages online for free. Safe vector scaling keeps text sharp and searchable. Runs 100% in browser."
+  canonical={`${siteUrl}/margin-pdf`}
+  jsonLd={jsonLd}
+  h1="Add <span class='highlight'>PDF</span> Margins Online Free"
+  tagline="Add custom padding/margins around PDF contents. Vector-based resizing that keeps text sharp and searchable. 100% client-side."
+  steps={steps}
+  faqs={faqs}
+  activePath="/margin-pdf"
+>
+  <MarginPdfTool client:load />
+</ToolPage>

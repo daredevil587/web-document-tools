@@ -1,0 +1,56 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import GrayscalePdfTool from '../components/tools/GrayscalePdfTool';
+
+const siteUrl = 'https://daredevil587.github.io/web-document-tools';
+
+const faqs = [
+  { q: 'Why convert a PDF to grayscale?', a: 'Grayscale PDFs use significantly less color ink/toner when printed, saving money and printer resources.' },
+  { q: 'Are my files sent to a server?', a: 'No. All rendering and pixel filtering is done client-side inside your browser. Your files never leave your device.' },
+  { q: 'Will this tool reduce the file size?', a: 'In many cases, yes. By flattening color channels and converting page images to grayscale JPEGs, the overall file size may shrink.' },
+  { q: 'Can I convert a password-protected PDF?', a: 'No. Please remove the password first using our Unlock PDF tool, then convert it to grayscale.' },
+  { q: 'Is there a page or size limit?', a: 'Files up to 50 MB are supported. Processing is done page-by-page, so larger files may take a few seconds.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Grayscale PDF Online Free',
+    url: `${siteUrl}/grayscale-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Convert color PDFs to black & white (grayscale) online for free. 100% private — runs in your browser.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12', title: 'Upload PDF', desc: 'Select any color PDF. The browser reads it locally.' },
+  { icon: 'M12 3v9 M8 11l4 4 4-4', title: 'Convert', desc: 'Our engine processes pages page-by-page and converts all colors to grayscale.' },
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3', title: 'Download', desc: 'Save your newly converted grayscale PDF to your device.' },
+];
+---
+
+<ToolPage
+  title="Grayscale PDF Online Free — Convert Color PDF to B&W | DocPrivacy Tools"
+  description="Convert color PDFs to black & white (grayscale) online for free. All processing is local and secure in your browser. Save printing ink and toner easily."
+  canonical={`${siteUrl}/grayscale-pdf`}
+  jsonLd={jsonLd}
+  h1="Grayscale <span class='highlight'>PDF</span> Online Free"
+  tagline="Convert color pages to grayscale / black and white. Save ink and paper when printing. 100% secure, fully local."
+  steps={steps}
+  faqs={faqs}
+  activePath="/grayscale-pdf"
+>
+  <GrayscalePdfTool client:load />
+</ToolPage>

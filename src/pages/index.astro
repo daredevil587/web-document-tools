@@ -109,6 +109,30 @@ const tools = [
     title: 'Redact PDF',
     desc: 'Blackout private text and sanitize PDF pages permanently. 100% browser-based security.',
   },
+  {
+    href: '/grayscale-pdf',
+    icon: '⚫',
+    color: '#ede9fe',
+    tag: 'PDF',
+    title: 'Grayscale PDF',
+    desc: 'Convert color PDFs to grayscale to save printing ink and paper resources.',
+  },
+  {
+    href: '/margin-pdf',
+    icon: '⏹️',
+    color: '#dbeafe',
+    tag: 'PDF',
+    title: 'Adjust PDF Margins',
+    desc: 'Scale page content down and add custom margins/padding for printing or binding.',
+  },
+  {
+    href: '/metadata-pdf',
+    icon: '🕵️',
+    color: '#dcfce7',
+    tag: 'Security',
+    title: 'Clean PDF Metadata',
+    desc: 'View, edit, or strip hidden document properties and XMP metadata streams.',
+  },
 ];
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -223,6 +247,9 @@ const jsonLd = {
         <a href={withBase('/protect-pdf')}>Protect PDF</a>
         <a href={withBase('/ocr')}>OCR Text Extractor</a>
         <a href={withBase('/redact-pdf')}>Redact PDF</a>
+        <a href={withBase('/grayscale-pdf')}>Grayscale PDF</a>
+        <a href={withBase('/margin-pdf')}>Adjust PDF Margins</a>
+        <a href={withBase('/metadata-pdf')}>Clean PDF Metadata</a>
       </div>
     </div>
   </footer>
