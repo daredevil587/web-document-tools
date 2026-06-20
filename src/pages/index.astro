@@ -101,6 +101,14 @@ const tools = [
     title: 'OCR Text Extractor',
     desc: 'Extract text from scanned PDFs and images locally. No files uploaded — 100% private.',
   },
+  {
+    href: '/redact-pdf',
+    icon: '🛡️',
+    color: '#fee2e2',
+    tag: 'Security',
+    title: 'Redact PDF',
+    desc: 'Blackout private text and sanitize PDF pages permanently. 100% browser-based security.',
+  },
 ];
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -214,6 +222,7 @@ const jsonLd = {
         <a href={withBase('/convert-image')}>Convert Image</a>
         <a href={withBase('/protect-pdf')}>Protect PDF</a>
         <a href={withBase('/ocr')}>OCR Text Extractor</a>
+        <a href={withBase('/redact-pdf')}>Redact PDF</a>
       </div>
     </div>
   </footer>

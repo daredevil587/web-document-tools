@@ -1,0 +1,56 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import RedactPdfTool from '../components/tools/RedactPdfTool';
+
+const siteUrl = 'https://daredevil587.github.io/web-document-tools';
+
+const faqs = [
+  { q: 'How does the PDF redactor ensure my private data is deleted?', a: 'Standard editors only draw a black rectangle on top of the text, meaning anyone can copy-paste and read the text underneath. Our tool renders redacted pages to canvases, draws the boxes over the pixels, and flattens them into JPEGs. This physically deletes all underlying text and metadata permanently.' },
+  { q: 'Are my files uploaded to a server?', a: 'No. All rendering, drawing, and compiler tasks run locally in your browser using WebAssembly. Your files never leave your device.' },
+  { q: 'Can I still select text on non-redacted pages?', a: 'Yes. Only pages containing redactions are flattened to images. Other pages are copied directly in vector format, keeping their copyable text and small file size.' },
+  { q: 'What is the maximum file size?', a: 'We support PDF documents up to 50 MB in size.' },
+  { q: 'Can I undo or edit redaction boxes before saving?', a: 'Yes. You can click the red delete (✕) button on any box to remove it, or clear all boxes on the current page instantly.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Redact PDF Online Free',
+    url: `${siteUrl}/redact-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Blackout and sanitize sensitive text or images in your PDF online for free. 100% private browser-based processing.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12', title: 'Upload PDF', desc: 'Select a PDF from your computer or mobile device. Pages render instantly.' },
+  { icon: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 1 1 3.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z', title: 'Draw Blackout Boxes', desc: 'Click and drag on any page preview to draw black rectangles over private details.' },
+  { icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0 1 12 2.944a11.955 11.955 0 0 1-8.618 3.04A12.02 12.02 0 0 0 3 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', title: 'Sanitize & Save', desc: 'Click "Apply & Redact PDF" to permanently flatten redacted pages and download the file.' },
+];
+---
+
+<ToolPage
+  title="Redact PDF Online Free — Securely Blackout Text | DocPrivacy Tools"
+  description="Redact and blackout sensitive text or images in your PDF online for free. 100% secure, local browser-based sanitization — files are never uploaded."
+  canonical={`${siteUrl}/redact-pdf`}
+  jsonLd={jsonLd}
+  h1="Redact <span class='highlight'>PDF</span> Online Free"
+  tagline="Permanently blackout private information and sanitize documents. Fully local browser-based processing."
+  steps={steps}
+  faqs={faqs}
+  activePath="/redact-pdf"
+>
+  <RedactPdfTool client:load />
+</ToolPage>
