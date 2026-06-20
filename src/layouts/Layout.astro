@@ -13,7 +13,7 @@ const {
   title,
   description,
   canonical,
-  ogImage = '/favicon.svg',
+  ogImage = '/og-image.png',
   jsonLd,
 } = Astro.props;
 
@@ -28,6 +28,11 @@ const ogImageUrl = withSite(ogImage);
 <!doctype html>
 <html lang="en" data-theme="light">
   <head>
+    <!-- Anti-FOUC: run before any CSS so dark-mode users never see a white flash -->
+    <script is:inline>
+      (function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();
+    </script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
@@ -55,8 +60,7 @@ const ogImageUrl = withSite(ogImage);
       <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     )}
 
-    <!-- Cloudflare Web Analytics placeholder -->
-    <!-- TODO: Replace with real token before launch -->
+    <!-- Cloudflare Web Analytics — replace YOUR_TOKEN before launch -->
     <!-- <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"YOUR_TOKEN"}'></script> -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -76,12 +80,6 @@ const ogImageUrl = withSite(ogImage);
           stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </button>
-
-    <script is:inline>
-      // Persist dark mode across page loads
-      const saved = localStorage.getItem('theme') || 'light';
-      document.documentElement.setAttribute('data-theme', saved);
-    </script>
 
     <script is:inline>
       // FAQ accordion

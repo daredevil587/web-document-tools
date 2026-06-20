@@ -5,40 +5,81 @@ import { formatBytes, triggerDownload } from '../../lib/utils';
 type State = 'upload' | 'ready' | 'processing' | 'done' | 'error';
 const ACCEPT = 'image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp';
 
+interface ImageFile {
+  file: File;
+  preview: string;
+}
+
 export default function JpgToPdfTool() {
   const [state, setState] = useState<State>('upload');
-  const [files, setFiles] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>([]);
+  const [images, setImages] = useState<ImageFile[]>([]);
   const [progress, setProgress] = useState(0);
   const [progressMsg, setProgressMsg] = useState('');
   const [resultBlob, setResultBlob] = useState<Blob | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
-  const [dragOver, setDragOver] = useState(false);
+  const [dropZoneDrag, setDropZoneDrag] = useState(false);
+  const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [dropIdx, setDropIdx] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const addFiles = useCallback((newFiles: FileList | File[]) => {
-    const arr = Array.from(newFiles).filter(f => f.type.startsWith('image/')).slice(0, FREE_FILE_COUNT);
-    if (!arr.length) return;
-    arr.forEach(f => {
-      const reader = new FileReader();
-      reader.onload = e => setPreviews(p => [...p, e.target!.result as string]);
-      reader.readAsDataURL(f);
+  const readPreview = (file: File): Promise<string> =>
+    new Promise(res => {
+      const r = new FileReader();
+      r.onload = e => res(e.target!.result as string);
+      r.readAsDataURL(file);
     });
-    setFiles(prev => [...prev, ...arr].slice(0, FREE_FILE_COUNT));
+
+  const addFiles = useCallback(async (newFiles: FileList | File[]) => {
+    const arr = Array.from(newFiles)
+      .filter(f => f.type.startsWith('image/'))
+      .slice(0, FREE_FILE_COUNT);
+    if (!arr.length) return;
+    const withPreviews = await Promise.all(
+      arr.map(async f => ({ file: f, preview: await readPreview(f) }))
+    );
+    setImages(prev => [...prev, ...withPreviews].slice(0, FREE_FILE_COUNT));
     setState('ready');
   }, []);
 
-  const removeFile = (idx: number) => {
-    setFiles(prev => { const n = prev.filter((_,i) => i !== idx); if (!n.length) setState('upload'); return n; });
-    setPreviews(prev => prev.filter((_,i) => i !== idx));
+  const removeImage = (idx: number) => {
+    setImages(prev => {
+      const next = prev.filter((_, i) => i !== idx);
+      if (!next.length) setState('upload');
+      return next;
+    });
   };
 
+  // ---- Drag-to-reorder ----
+  const handleDragStart = (e: React.DragEvent, idx: number) => {
+    setDragIdx(idx);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+  const handleDragOver = (e: React.DragEvent, idx: number) => {
+    e.preventDefault();
+    if (dragIdx !== null && idx !== dragIdx) setDropIdx(idx);
+  };
+  const handleDrop = (e: React.DragEvent, targetIdx: number) => {
+    e.preventDefault();
+    if (dragIdx === null || dragIdx === targetIdx) { setDragIdx(null); setDropIdx(null); return; }
+    setImages(prev => {
+      const arr = [...prev];
+      const [moved] = arr.splice(dragIdx, 1);
+      arr.splice(targetIdx, 0, moved);
+      return arr;
+    });
+    setDragIdx(null);
+    setDropIdx(null);
+  };
+  const handleDragEnd = () => { setDragIdx(null); setDropIdx(null); };
+
   const run = async () => {
-    if (!files.length) return;
+    if (!images.length) return;
     setState('processing');
     setProgress(0);
     try {
-      const blob = await imagesToPdf(files, (pct, msg) => { setProgress(pct); setProgressMsg(msg); });
+      const blob = await imagesToPdf(images.map(i => i.file), (pct, msg) => {
+        setProgress(pct); setProgressMsg(msg);
+      });
       setResultBlob(blob);
       setState('done');
       triggerDownload(blob, 'images.pdf');
@@ -48,19 +89,19 @@ export default function JpgToPdfTool() {
     }
   };
 
-  const reset = () => { setFiles([]); setPreviews([]); setResultBlob(null); setErrorMsg(''); setState('upload'); };
+  const reset = () => { setImages([]); setResultBlob(null); setErrorMsg(''); setState('upload'); };
 
   return (
     <div>
       {(state === 'upload' || state === 'ready') && (
         <>
           <div
-            className={`upload-area${dragOver ? ' dragover' : ''}`}
-            style={{ marginBottom: files.length ? '20px' : 0 }}
+            className={`upload-area${dropZoneDrag ? ' dragover' : ''}`}
+            style={{ marginBottom: images.length ? '20px' : 0 }}
             onClick={() => inputRef.current?.click()}
-            onDragOver={e => { e.preventDefault(); setDragOver(true); }}
-            onDragLeave={() => setDragOver(false)}
-            onDrop={e => { e.preventDefault(); setDragOver(false); addFiles(e.dataTransfer.files); }}
+            onDragOver={e => { e.preventDefault(); setDropZoneDrag(true); }}
+            onDragLeave={() => setDropZoneDrag(false)}
+            onDrop={e => { e.preventDefault(); setDropZoneDrag(false); addFiles(e.dataTransfer.files); }}
           >
             <div className="upload-icon">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
@@ -69,33 +110,46 @@ export default function JpgToPdfTool() {
                 <polyline points="21 15 16 10 5 21" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <h3>{files.length ? 'Add More Images' : 'Drag & Drop images here'}</h3>
+            <h3>{images.length ? 'Add More Images' : 'Drag & Drop images here'}</h3>
             <p className="upload-sub">JPG, PNG, WebP accepted</p>
             <input ref={inputRef} type="file" accept={ACCEPT} multiple hidden
               onChange={e => e.target.files && addFiles(e.target.files)} />
             <button className="btn-upload" onClick={e => { e.stopPropagation(); inputRef.current?.click(); }}>
-              {files.length ? '+ Add More Images' : 'Choose Images'}
+              {images.length ? '+ Add More Images' : 'Choose Images'}
             </button>
             <p className="file-limit">Max {FREE_FILE_COUNT} images · {FREE_FILE_LIMIT_MB} MB each</p>
           </div>
 
-          {files.length > 0 && (
+          {images.length > 0 && (
             <>
-              <div className="image-grid" style={{ marginBottom: '18px' }}>
-                {previews.map((src, i) => (
-                  <div className="image-thumb" key={i}>
-                    <img src={src} alt={files[i]?.name ?? `Image ${i+1}`} />
-                    <div className="image-thumb-label">{i+1}. {files[i]?.name?.split('.')[0]}</div>
-                    <button onClick={() => removeFile(i)}
-                      style={{ position:'absolute',top:'4px',right:'4px',background:'rgba(0,0,0,0.55)',border:'none',borderRadius:'50%',width:'20px',height:'20px',color:'#fff',cursor:'pointer',fontSize:'0.7rem',display:'flex',alignItems:'center',justifyContent:'center' }}>
-                      ✕
-                    </button>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '10px' }}>
+                <strong>Drag thumbnails to reorder</strong> · {images.length} image{images.length !== 1 ? 's' : ''} selected
+              </p>
+              <div className="jpg-grid">
+                {images.map(({ file, preview }, i) => (
+                  <div
+                    key={i}
+                    className={`jpg-thumb${dragIdx === i ? ' dragging' : ''}${dropIdx === i ? ' drop-target' : ''}`}
+                    draggable
+                    onDragStart={e => handleDragStart(e, i)}
+                    onDragOver={e => handleDragOver(e, i)}
+                    onDrop={e => handleDrop(e, i)}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <img src={preview} alt={file.name} draggable={false} />
+                    <div className="jpg-thumb-num">{i + 1}</div>
+                    <button
+                      className="jpg-thumb-remove"
+                      onClick={() => removeImage(i)}
+                      title="Remove"
+                    >✕</button>
+                    <div className="jpg-thumb-label">{file.name.replace(/\.[^.]+$/, '')}</div>
                   </div>
                 ))}
               </div>
               <button className="btn-action" onClick={run}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#fff" strokeWidth="2"/><polyline points="14 2 14 8 20 8" stroke="#fff" strokeWidth="2"/></svg>
-                Convert {files.length} Image{files.length !== 1 ? 's' : ''} to PDF
+                Convert {images.length} Image{images.length !== 1 ? 's' : ''} to PDF
               </button>
             </>
           )}
@@ -118,9 +172,9 @@ export default function JpgToPdfTool() {
             <svg width="52" height="52" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#22c55e"/><polyline points="7.5 12 10.5 15 16.5 9" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </div>
           <h3>PDF Created!</h3>
-          <p>{files.length} image{files.length !== 1 ? 's' : ''} converted to a single PDF.</p>
+          <p>{images.length} image{images.length !== 1 ? 's' : ''} converted to a single PDF.</p>
           <div className="result-meta">
-            <div className="result-meta-item"><strong>{files.length}</strong><small>Images</small></div>
+            <div className="result-meta-item"><strong>{images.length}</strong><small>Images</small></div>
             <div className="result-meta-divider"/>
             <div className="result-meta-item"><strong>{formatBytes(resultBlob.size)}</strong><small>PDF size</small></div>
           </div>

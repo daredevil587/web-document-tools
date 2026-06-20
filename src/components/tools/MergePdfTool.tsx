@@ -12,6 +12,8 @@ export default function MergePdfTool() {
   const [resultBlob, setResultBlob] = useState<Blob | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [dragOver, setDragOver] = useState(false);
+  const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [dropIdx, setDropIdx] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const addFiles = useCallback((newFiles: FileList | File[]) => {
@@ -32,16 +34,32 @@ export default function MergePdfTool() {
     });
   };
 
-  const moveUp = (idx: number) => {
-    if (idx === 0) return;
-    setFiles(prev => { const a = [...prev]; [a[idx-1], a[idx]] = [a[idx], a[idx-1]]; return a; });
+  // ---- Drag-to-reorder ----
+  const handleDragStart = (e: React.DragEvent, idx: number) => {
+    setDragIdx(idx);
+    e.dataTransfer.effectAllowed = 'move';
+    // So the dragged ghost looks right
+    e.dataTransfer.setData('text/plain', String(idx));
   };
-  const moveDown = (idx: number) => {
+  const handleDragOver = (e: React.DragEvent, idx: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (dragIdx !== null && idx !== dragIdx) setDropIdx(idx);
+  };
+  const handleDragLeave = () => setDropIdx(null);
+  const handleDrop = (e: React.DragEvent, targetIdx: number) => {
+    e.preventDefault();
+    if (dragIdx === null || dragIdx === targetIdx) { setDragIdx(null); setDropIdx(null); return; }
     setFiles(prev => {
-      if (idx >= prev.length - 1) return prev;
-      const a = [...prev]; [a[idx], a[idx+1]] = [a[idx+1], a[idx]]; return a;
+      const arr = [...prev];
+      const [moved] = arr.splice(dragIdx, 1);
+      arr.splice(targetIdx, 0, moved);
+      return arr;
     });
+    setDragIdx(null);
+    setDropIdx(null);
   };
+  const handleDragEnd = () => { setDragIdx(null); setDropIdx(null); };
 
   const run = async () => {
     if (files.length < 2) return;
@@ -64,7 +82,7 @@ export default function MergePdfTool() {
     <div>
       {(state === 'upload' || state === 'ready') && (
         <>
-          {/* Drop zone always visible to add more files */}
+          {/* Drop zone */}
           <div
             className={`upload-area${dragOver ? ' dragover' : ''}`}
             style={{ marginBottom: files.length ? '20px' : 0 }}
@@ -93,17 +111,38 @@ export default function MergePdfTool() {
           {files.length > 0 && (
             <>
               <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '10px' }}>
-                Drag rows to reorder · {files.length} file{files.length !== 1 ? 's' : ''} selected
+                <strong>Drag rows to reorder</strong> · {files.length} file{files.length !== 1 ? 's' : ''} selected
               </p>
               <div className="merge-list">
                 {files.map((f, i) => (
-                  <div className="merge-item" key={i}>
-                    <span className="merge-drag-handle">☰</span>
-                    <span className="merge-item-name">{i + 1}. {f.name}</span>
+                  <div
+                    key={i}
+                    className={`merge-item${dragIdx === i ? ' dragging' : ''}${dropIdx === i ? ' drop-target' : ''}`}
+                    draggable
+                    onDragStart={e => handleDragStart(e, i)}
+                    onDragOver={e => handleDragOver(e, i)}
+                    onDragLeave={handleDragLeave}
+                    onDrop={e => handleDrop(e, i)}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <span className="merge-drag-handle" title="Drag to reorder">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <circle cx="9" cy="6" r="1.5" fill="currentColor"/>
+                        <circle cx="15" cy="6" r="1.5" fill="currentColor"/>
+                        <circle cx="9" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="15" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="9" cy="18" r="1.5" fill="currentColor"/>
+                        <circle cx="15" cy="18" r="1.5" fill="currentColor"/>
+                      </svg>
+                    </span>
+                    <span className="merge-order-badge">{i + 1}</span>
+                    <span className="merge-item-name">{f.name}</span>
                     <span className="merge-item-size">{formatBytes(f.size)}</span>
-                    <button style={{ background:'none',border:'none',cursor:'pointer',padding:'2px 4px',color:'var(--text-muted)' }} onClick={() => moveUp(i)} title="Move up">↑</button>
-                    <button style={{ background:'none',border:'none',cursor:'pointer',padding:'2px 4px',color:'var(--text-muted)' }} onClick={() => moveDown(i)} title="Move down">↓</button>
-                    <button className="btn-remove-file" onClick={() => removeFile(i)}>✕</button>
+                    <button
+                      className="btn-remove-file"
+                      title="Remove"
+                      onClick={() => removeFile(i)}
+                    >✕</button>
                   </div>
                 ))}
               </div>
@@ -135,15 +174,9 @@ export default function MergePdfTool() {
           <h3>Merge Complete!</h3>
           <p>All {files.length} PDFs merged into one file.</p>
           <div className="result-meta">
-            <div className="result-meta-item">
-              <strong>{files.length}</strong>
-              <small>Files merged</small>
-            </div>
+            <div className="result-meta-item"><strong>{files.length}</strong><small>Files merged</small></div>
             <div className="result-meta-divider"/>
-            <div className="result-meta-item">
-              <strong>{formatBytes(resultBlob.size)}</strong>
-              <small>Output size</small>
-            </div>
+            <div className="result-meta-item"><strong>{formatBytes(resultBlob.size)}</strong><small>Output size</small></div>
           </div>
           <div className="success-actions">
             <button className="btn-download" onClick={() => triggerDownload(resultBlob, 'merged.pdf')}>

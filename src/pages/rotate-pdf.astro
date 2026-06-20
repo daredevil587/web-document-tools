@@ -1,0 +1,56 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import RotatePdfTool from '../components/tools/RotatePdfTool';
+
+const siteUrl = 'https://daredevil587.github.io/web-document-tools';
+
+const faqs = [
+  { q: 'Can I rotate only specific pages?', a: 'Yes. You can rotate individual pages clockwise or counter-clockwise, or rotate all pages at once with the toolbar buttons.' },
+  { q: 'Are my files uploaded to a server?', a: 'No. All rotation logic runs completely locally in your browser. Your files never leave your device.' },
+  { q: 'Does it work on password-protected PDFs?', a: 'No. If your PDF is encrypted, you will need to unlock it first using our Unlock PDF tool before rotating pages.' },
+  { q: 'Will the quality of the PDF be affected?', a: 'No. The rotation edits the PDF metadata structure directly, meaning the visual elements, text, and quality remain 100% identical.' },
+  { q: 'Is there a limit on file size?', a: 'You can upload and rotate PDFs up to 100 MB in size.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Rotate PDF Online Free',
+    url: `${siteUrl}/rotate-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Rotate PDF pages online for free. Support for individual page rotation and rotating all pages. 100% private.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12', title: 'Upload PDF', desc: 'Choose a PDF file from your device. Thumbnails of your PDF pages will load instantly.' },
+  { icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 1 1 21 12', title: 'Rotate Pages', desc: 'Click the clockwise or counter-clockwise buttons on individual pages, or rotate all at once.' },
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3', title: 'Save & Download', desc: 'Click "Save PDF" to compile your changes and download the rotated PDF file.' },
+];
+---
+
+<ToolPage
+  title="Rotate PDF Pages Online Free — 100% Private | DocPrivacy Tools"
+  description="Rotate individual PDF pages or all pages at once online for free. Completely private browser-based tool — files never leave your device."
+  canonical={`${siteUrl}/rotate-pdf`}
+  jsonLd={jsonLd}
+  h1="Rotate <span class='highlight'>PDF</span> Pages Online"
+  tagline="Permanently rotate specific PDF pages or the entire document. Works entirely in your browser — 100% private."
+  steps={steps}
+  faqs={faqs}
+  activePath="/rotate-pdf"
+>
+  <RotatePdfTool client:load />
+</ToolPage>

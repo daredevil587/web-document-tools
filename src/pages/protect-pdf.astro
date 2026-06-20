@@ -1,0 +1,56 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import ProtectPdfTool from '../components/tools/ProtectPdfTool';
+
+const siteUrl = 'https://daredevil587.github.io/web-document-tools';
+
+const faqs = [
+  { q: 'How does PDF password protection work?', a: 'This tool encrypts your PDF with RC4 128-bit encryption, setting a password requirement. Anyone attempting to open the PDF will be prompted to enter the password.' },
+  { q: 'Are my passwords or files uploaded to your servers?', a: 'No. All encryption processing happens locally in your browser. Neither your PDF file nor the password you type is ever uploaded or sent over the network.' },
+  { q: 'What kind of encryption is used?', a: 'We use standard 128-bit RC4 encryption which is supported natively by all major PDF viewers (Adobe Acrobat, Chrome, Safari, macOS Preview, etc.).' },
+  { q: 'Can I remove the password later?', a: 'Yes. If you know the password, you can remove the protection at any time using our Unlock PDF tool.' },
+  { q: 'Is there a limit on file size?', a: 'You can protect PDF documents up to 100 MB in size.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Protect PDF Online Free',
+    url: `${siteUrl}/protect-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Encrypt and password protect your PDF files online for free. 100% private browser-based processing.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12', title: 'Upload PDF', desc: 'Select a PDF document from your computer or mobile device.' },
+  { icon: 'M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4', title: 'Set Password', desc: 'Type and confirm the password you want to lock the file with.' },
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3', title: 'Download Secure PDF', desc: 'The encrypted PDF compiles instantly in your browser and starts downloading.' },
+];
+---
+
+<ToolPage
+  title="Protect PDF Online Free — Encrypt PDF with Password | DocPrivacy Tools"
+  description="Password protect your PDF files online for free. Encrypt your document securely inside your browser — your password and files never leave your device."
+  canonical={`${siteUrl}/protect-pdf`}
+  jsonLd={jsonLd}
+  h1="Protect <span class='highlight'>PDF</span> Online Free"
+  tagline="Add password encryption to your PDF documents. Fully local processing — 100% private, no uploads."
+  steps={steps}
+  faqs={faqs}
+  activePath="/protect-pdf"
+>
+  <ProtectPdfTool client:load />
+</ToolPage>

@@ -1,0 +1,56 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import SplitPdfTool from '../components/tools/SplitPdfTool';
+
+const siteUrl = 'https://daredevil587.github.io/web-document-tools';
+
+const faqs = [
+  { q: 'Does it work on password-protected PDFs?', a: 'No. Remove the password first using our Unlock PDF tool, then split.' },
+  { q: 'Are my files sent to a server?', a: 'No. All processing runs entirely in your browser. Files never leave your device.' },
+  { q: 'Can I extract any combination of pages?', a: 'Yes — click any page thumbnails to select or deselect them. Extract any subset you need.' },
+  { q: 'What is the maximum file size?', a: 'Up to 100 MB. For larger files, try splitting in smaller chunks.' },
+  { q: 'Will the extracted pages keep their original quality?', a: 'Yes. The extraction is lossless — no re-encoding, so quality is identical to the source.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Split PDF Online Free',
+    url: `${siteUrl}/split-pdf`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Extract specific pages from a PDF online for free. 100% private — runs in your browser.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12', title: 'Upload PDF', desc: 'Select any PDF. Thumbnails of all pages load instantly in your browser.' },
+  { icon: 'M9 11l3 3L22 4', title: 'Select Pages', desc: 'Click the pages you want to keep. Select all or pick any combination.' },
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3', title: 'Download', desc: 'A new PDF with only your chosen pages downloads instantly.' },
+];
+---
+
+<ToolPage
+  title="Split PDF Online Free — Extract Pages Privately | DocPrivacy Tools"
+  description="Extract specific pages from any PDF online, free. No upload to servers — PDF splitting runs entirely in your browser with zero quality loss."
+  canonical={`${siteUrl}/split-pdf`}
+  jsonLd={jsonLd}
+  h1="Split <span class='highlight'>PDF</span> Online Free"
+  tagline="Select the pages you want to keep — extract any combination into a new PDF. 100% private, no upload."
+  steps={steps}
+  faqs={faqs}
+  activePath="/split-pdf"
+>
+  <SplitPdfTool client:load />
+</ToolPage>

@@ -1,0 +1,56 @@
+---
+import ToolPage from '../components/ToolPage.astro';
+import ConvertImageTool from '../components/tools/ConvertImageTool';
+
+const siteUrl = 'https://daredevil587.github.io/web-document-tools';
+
+const faqs = [
+  { q: 'Which image formats are supported?', a: 'You can convert between PNG, JPG (JPEG), and WebP formats in any direction.' },
+  { q: 'Are my images uploaded to a server?', a: 'No. The conversion runs entirely in your browser using the HTML5 Canvas API. Your images are never uploaded to any server.' },
+  { q: 'Can I control the output file size and quality?', a: 'Yes. When converting to JPG or WebP, a quality slider allows you to choose from 50% to 100% quality to optimize the file size.' },
+  { q: 'Will converting to PNG keep the transparency?', a: 'Yes. Converting from WebP or PNG to PNG will preserve transparency. Note that JPG does not support transparency, so transparent areas will turn white.' },
+  { q: 'Is there a limit on file size?', a: 'You can convert images up to 20 MB in size.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Image Converter Online Free',
+    url: `${siteUrl}/convert-image`,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: 'Convert images between PNG, JPG, and WebP formats online for free. Adjust quality, compare file sizes. 100% private.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+
+const steps = [
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8 12 3 7 8 M12 3v12', title: 'Upload Image', desc: 'Choose a PNG, JPG, or WebP image from your device.' },
+  { icon: 'M12 6V2m0 20v-4m0-4v-4m0 0H8m4 0h4', title: 'Set Options', desc: 'Select your target format (JPG, PNG, or WebP) and adjust the quality slider.' },
+  { icon: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3', title: 'Download', desc: 'Your converted image is processed instantly and downloaded to your device.' },
+];
+---
+
+<ToolPage
+  title="Convert Image Online Free — PNG, JPG, WebP | DocPrivacy Tools"
+  description="Convert images between PNG, JPG, and WebP formats online for free. Adjust compression quality and compare file sizes locally — files never leave your browser."
+  canonical={`${siteUrl}/convert-image`}
+  jsonLd={jsonLd}
+  h1="Convert <span class='highlight'>Image</span> Online Free"
+  tagline="Convert images between PNG, JPG, and WebP formats. 100% private local processing — no uploads, no sign-ups."
+  steps={steps}
+  faqs={faqs}
+  activePath="/convert-image"
+>
+  <ConvertImageTool client:load />
+</ToolPage>

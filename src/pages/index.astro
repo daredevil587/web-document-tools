@@ -61,6 +61,38 @@ const tools = [
     title: 'Unlock PDF',
     desc: 'Remove permission restrictions from PDFs you own. Processing is 100% local — files never leave your device.',
   },
+  {
+    href: '/split-pdf',
+    icon: '✂️',
+    color: '#fee2e2',
+    tag: 'PDF',
+    title: 'Split PDF',
+    desc: 'Extract specific pages from a PDF document or save selected page ranges into a new PDF.',
+  },
+  {
+    href: '/rotate-pdf',
+    icon: '🔄',
+    color: '#dbeafe',
+    tag: 'PDF',
+    title: 'Rotate PDF',
+    desc: 'Permanently rotate PDF pages clockwise or counter-clockwise. Choose individual pages or all pages.',
+  },
+  {
+    href: '/convert-image',
+    icon: '🔁',
+    color: '#ede9fe',
+    tag: 'Image',
+    title: 'Convert Image',
+    desc: 'Convert images between PNG, JPG, and WebP formats instantly with visual size comparison.',
+  },
+  {
+    href: '/protect-pdf',
+    icon: '🔒',
+    color: '#fee2e2',
+    tag: 'Security',
+    title: 'Protect PDF',
+    desc: 'Encrypt your PDF files with a secure password to prevent unauthorized viewing.',
+  },
 ];
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -169,6 +201,10 @@ const jsonLd = {
         <a href={withBase('/compress-image')}>Compress Image</a>
         <a href={withBase('/edit-pdf')}>Edit PDF</a>
         <a href={withBase('/unlock-pdf')}>Unlock PDF</a>
+        <a href={withBase('/split-pdf')}>Split PDF</a>
+        <a href={withBase('/rotate-pdf')}>Rotate PDF</a>
+        <a href={withBase('/convert-image')}>Convert Image</a>
+        <a href={withBase('/protect-pdf')}>Protect PDF</a>
       </div>
     </div>
   </footer>
