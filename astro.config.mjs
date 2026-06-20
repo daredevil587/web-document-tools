@@ -15,7 +15,7 @@ export default defineConfig({
     optimizeDeps: {
       // pdfjs-dist must NOT be pre-bundled (it has a dynamic worker import)
       exclude: ['pdfjs-dist'],
-      include: ['pdf-lib'],
+      include: ['pdf-lib', '@pdfsmaller/pdf-encrypt-lite', 'tesseract.js'],
     },
     build: {
       rollupOptions: {
